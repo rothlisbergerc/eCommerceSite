@@ -45,7 +45,7 @@ namespace eCommerceSite.Controllers
                 _context.Products.Add(p);
                 _context.SaveChanges();
 
-                TempData["Message"] = $"{p.ProductId}:{p.Title} was added successfully";
+                TempData["Message"] = $"{p.Title} was added successfully";
 
                 // redirect back to catalog page
                 return RedirectToAction("Index");
