@@ -85,6 +85,7 @@ namespace eCommerceSite.Controllers
             return View(p);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             Product p = await (from prod in _context.Products
@@ -92,6 +93,23 @@ namespace eCommerceSite.Controllers
                         select prod).SingleAsync();
 
             return View(p);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            Product p = await (from prod in _context.Products // gets product from the database
+                        where prod.ProductId == id
+                        select prod).SingleAsync();
+
+            _context.Entry(p).State = EntityState.Deleted; // deletes the product
+
+            await _context.SaveChangesAsync(); // sends delete query to the database
+
+            TempData["Message"] = $"{p.Title} was deleted";
+
+            return RedirectToAction("Index");
         }
     }
 
