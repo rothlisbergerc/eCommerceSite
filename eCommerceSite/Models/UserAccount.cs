@@ -33,6 +33,10 @@ namespace eCommerceSite.Models
         public string ConfirmEmail { get; set; }
 
         [Required]
+        [StringLength(20)]
+        public string Username { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         [StringLength(120, MinimumLength = 6, ErrorMessage = "Password must be between {2} and {1}")]
         public string Password { get; set; }
