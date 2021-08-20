@@ -34,14 +34,21 @@ namespace eCommerceSite.Controllers
                     Password = reg.Password,
                     Username = reg.Username
                 };
+
                 // add to database
                 _context.UserAccounts.Add(acc);
                 await _context.SaveChangesAsync();
+
                 // redirect to home page
                 return RedirectToAction("Index", "home");
             }
 
             return View(reg);
+        }
+
+        public IActionResult Login()
+        {
+            return View();
         }
     }
 }
