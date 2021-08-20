@@ -1,7 +1,30 @@
-﻿
+﻿@using Microsoft.EntityFrameworkCore
 @inject IHttpContextAccessor sessionData
+@inject eCommerceSite.Data.ProductContext db
+
 @{ 
     int? userId = sessionData.HttpContext.Session.GetInt32("UserId");
+    string username = null;
+
+    if (userId.HasValue)
+    {
+        string userNameFromSession = 
+            sessionData.HttpContext.Session.GetString("Username");
+
+        if (userNameFromSession == null)
+        {
+            username = await (from u in db.UserAccounts
+                              where u.UserId == userId
+                              select u.Username).SingleOrDefaultAsync();
+
+            sessionData.HttpContext.Session.SetString("Username", username);
+        }
+        else
+        {
+            username = userNameFromSession;
+        }
+
+    }
 }
 
 <!DOCTYPE html>
@@ -45,10 +68,9 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark disabled">Welcome back!</a>
+                                <a class="nav-link text-dark disabled">Welcome @username!</a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>
