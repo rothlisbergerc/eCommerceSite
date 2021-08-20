@@ -1,6 +1,7 @@
 ﻿using eCommerceSite.Data;
 using eCommerceSite.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,40 @@ namespace eCommerceSite.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            //UserAccount account =
+            //    await (from u in _context.UserAccounts
+            //     where (u.Username == model.UsernameOrEmail
+            //        || u.Email == model.UsernameOrEmail)
+            //        && u.Password == model.Password
+            //     select u).SingleOrDefaultAsync();
+
+            // This is the same thing as the above code but writen with a lambda expression instead
+            UserAccount account = await _context.UserAccounts
+                    .Where(userAcc => (userAcc.Username == model.UsernameOrEmail ||
+                                        userAcc.Email == model.UsernameOrEmail) &&
+                                        userAcc.Password == model.Password)
+                    .SingleOrDefaultAsync();
+
+            if(account == null)
+            {
+                // Custom error message
+                ModelState.AddModelError(string.Empty, "Credentials were not found");
+
+                return View(model);
+            }
+
+            // Log user into website
+            return RedirectToAction("Index", "Home");
         }
     }
 }
