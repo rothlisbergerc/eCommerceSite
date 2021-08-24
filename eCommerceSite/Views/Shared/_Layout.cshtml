@@ -1,4 +1,5 @@
 ﻿@using Microsoft.EntityFrameworkCore
+
 @inject IHttpContextAccessor sessionData
 @inject eCommerceSite.Data.ProductContext db
 
@@ -69,6 +70,11 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark disabled">Welcome @username!</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Logout" asp-controller="User">
+                                    Logout
+                                </a>
                             </li>
                         }
                     </ul>
